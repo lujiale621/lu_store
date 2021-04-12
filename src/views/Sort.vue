@@ -1,20 +1,28 @@
 <template>
   <div>
-    <van-nav-bar title="标题" left-text="返回" right-text="按钮" left-arrow @click-left="onClickLeft" />
-    <div>
+    <van-nav-bar title="商品分类" left-text="返回" right-text left-arrow @click-left="onClickLeft" />
+    <div class="sort-tab">
       <van-sidebar v-model="activeKey">
         <van-sidebar-item
           v-for="item in categoryList"
           :key="item.category_id"
           :title="''+item.category_name"
+          :activeName="activeKey"
         ></van-sidebar-item>
       </van-sidebar>
+      <div class="sad">
+        <div class="card" v-for="item2 in product" :key="item2.product_id">
+          <sortcard :sortattrs="item2"></sortcard>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
+import sortcard from "@/components/sortcard.vue";
+
 export default {
-  components: {},
+  components: { sortcard },
   data() {
     return {
       activeKey: 0,
@@ -58,7 +66,10 @@ export default {
   },
   watch: {
     // 监听点击了哪个分类标签，通过修改分类id，响应相应的商品
-    activeName: function (val) {
+    activeKey: function (val) {
+      console.log("val:", val);
+      this.activeName = "" + val;
+      console.log(this.activeName);
       if (val == 0) {
         this.categoryID = [];
       }
@@ -70,7 +81,7 @@ export default {
       this.currentPage = 1;
       // 更新地址栏链接，方便刷新页面可以回到原来的页面
       this.$router.push({
-        path: "/goods",
+        path: "/sort",
         query: { categoryID: this.categoryID },
       });
     },
@@ -82,6 +93,7 @@ export default {
     },
     // 监听分类id，响应相应的商品
     categoryID: function () {
+      console.log("catagoryid", this.categoryID);
       this.getData();
       this.search = "";
     },
@@ -141,7 +153,7 @@ export default {
             this.categoryList.push(element);
           });
           //   this.categoryList = cate;
-          //console.log("this:", cate);
+          console.log("this:", this);
         })
         .catch((err) => {
           return Promise.reject(err);
@@ -150,6 +162,7 @@ export default {
     // 向后端请求全部商品或分类商品数据
     getData() {
       // 如果分类列表为空则请求全部商品数据，否则请求分类商品数据
+      console.log("getdata");
       const api =
         this.categoryID.length == 0
           ? "/api/product/getAllProduct"
@@ -163,6 +176,7 @@ export default {
         .then((res) => {
           this.product = res.data.Product;
           this.total = res.data.total;
+          console.log("this", this);
         })
         .catch((err) => {
           return Promise.reject(err);
@@ -188,4 +202,11 @@ export default {
 };
 </script>
 <style scoped>
+.sad {
+  display: inline;
+  width: 300px;
+}
+.sort-tab {
+  display: flex;
+}
 </style>
