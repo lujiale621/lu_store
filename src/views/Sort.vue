@@ -11,9 +11,11 @@
         ></van-sidebar-item>
       </van-sidebar>
       <div class="sad">
-        <div class="card" v-for="item2 in product" :key="item2.product_id">
-          <sortcard :sortattrs="item2"></sortcard>
-        </div>
+        <vue-scroll :ops="ops">
+          <div class="card" v-for="item2 in product" :key="item2.product_id">
+            <sortcard :sortattrs="item2"></sortcard>
+          </div>
+        </vue-scroll>
       </div>
     </div>
   </div>
@@ -35,11 +37,29 @@ export default {
       currentPage: 1, //当前页码
       activeName: "-1", // 分类列表当前选中的id
       search: "", // 搜索条件
+      ops: {
+        vuescroll: {},
+        scrollPanel: {
+          initialScrollY: false,
+          initialScrollX: false,
+          scrollingX: true,
+          scrollingY: true,
+          speed: 300,
+          easing: undefined,
+          verticalNativeBarPos: "right",
+          maxHeight: undefined,
+          maxWidth: undefined,
+        },
+        rail: {},
+        bar: {},
+      },
     };
   },
   created() {
     // 获取分类列表
     this.getCategory();
+    this.categoryID.length == 0;
+    this.getData();
   },
   activated() {
     this.activeName = "-1"; // 初始化分类列表当前选中的id为-1
@@ -111,7 +131,7 @@ export default {
   },
   methods: {
     onClickLeft() {
-      this.$router.go(-1);
+      this.$router.push("/home");
     },
     // 返回顶部
     backtop() {
