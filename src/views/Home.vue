@@ -61,9 +61,9 @@
        </van-tabs>
     </div>
     <div class="footer">
-      <van-tabbar v-model="active">
+      <van-tabbar v-model="active_bar">
         <van-tabbar-item icon="home-o">首页</van-tabbar-item>
-        <van-tabbar-item icon="search">分类</van-tabbar-item>
+        <van-tabbar-item icon="search" :to="{ path: '/sort' }">分类</van-tabbar-item>
         <van-tabbar-item icon="friends-o">购物车</van-tabbar-item>
         <van-tabbar-item icon="setting-o">我的</van-tabbar-item>
       </van-tabbar>
@@ -91,6 +91,7 @@ export default {
       chargerList: "", //充电器商品列表
       applianceActive: 1, // 家电当前选中的商品分类
       accessoryActive: 1, // 配件当前选中的商品分类
+      active_bar:'',
       active:'',
       searchvalue:''
     };
