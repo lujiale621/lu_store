@@ -1,39 +1,32 @@
 <template>
   <div id="myList" class="myList">
     <div class="scrollcard">
-        <van-row>
-          <van-col span="2">
-            <div class="imgdiv">
-              <img
-                class="icon-avatar"
-                src="../assets/tv.png"
-                alt="Smiley face"
-                width="30"
-                height="30"
-              />
-            </div>
-          </van-col>
-          <van-col span="10">
-            <p class="list-title">{{this.nvtype}}</p>
-          </van-col>
-          <van-col span="12">
-            <p class="list-update">更多></p>
-          </van-col>
-        </van-row>
-        <div>
-          <vue-scroll :ops="ops">
-            <div style="display: flex;">
-              <novelcard
-                v-for="item of list"
-                :key="item.id"
-                :nvattrs="item"
-                style="margin: 10px;"
-               
-              ></novelcard>
-            </div>
-          </vue-scroll>
-        </div>
-
+      <van-row>
+        <van-col span="2">
+          <div class="imgdiv">
+            <img
+              class="icon-avatar"
+              src="../assets/tv.png"
+              alt="Smiley face"
+              width="30"
+              height="30"
+            />
+          </div>
+        </van-col>
+        <van-col span="10">
+          <p class="list-title">{{this.nvtype}}</p>
+        </van-col>
+        <van-col span="12">
+          <p class="list-update" @click="tonovelsort">更多></p>
+        </van-col>
+      </van-row>
+      <div>
+        <vue-scroll :ops="ops">
+          <div style="display: flex;">
+            <novelcard v-for="item of list" :key="item.id" :nvattrs="item" style="margin: 10px;"></novelcard>
+          </div>
+        </vue-scroll>
+      </div>
     </div>
   </div>
 </template>
@@ -44,7 +37,7 @@ export default {
   name: "MyList",
   // list为父组件传过来的商品列表
   // isMore为是否显示“浏览更多”
-  props: ["list", "isMore", "isDelete","nvtype"],
+  props: ["list", "isMore", "isDelete", "nvtype"],
   data() {
     return {
       ops: {
@@ -76,6 +69,12 @@ export default {
     },
   },
   methods: {
+    tonovelsort() {
+      this.$router.push({
+        path: "/sort",
+        query: {},
+      });
+    },
     deleteCollect(product_id) {
       this.$axios
         .post("/api/user/collect/deleteCollect", {

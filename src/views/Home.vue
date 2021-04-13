@@ -71,6 +71,28 @@
    
       <!-- 文字较短时，通过设置 scrollable 属性开启滚动播放 -->
       <van-notice-bar scrollable text="技术是开发它的人的共同灵魂。" />
+        <div class="nav">
+          <van-grid>
+            <van-grid-item :to="{ path: '/showrank2' }">
+              <div class="itcon">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-jinrongketang" />
+                </svg>
+                <h4 class="font">推荐</h4>
+              </div>
+            </van-grid-item>
+            <van-grid-item :to="{ path: '/showrank' }">
+              <div class="itcon">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-bangdan" />
+                </svg>
+                <h4 class="font">排行榜</h4>
+              </div>
+            </van-grid-item>
+            <van-grid-item />
+            <van-grid-item />
+          </van-grid>
+        </div>
      <van-tabs v-model="active" scrollspy sticky>
         <van-tab title="手机" class="tab">
           <div class="list">
@@ -317,5 +339,59 @@ export default {
   height: 100%;
   color: black;
 
+}
+.van-nav-bar__left {
+  height: 35px;
+  left: 8px !important;
+}
+.van-nav-bar__title {
+  margin-left: 40px !important;
+  max-width: 65% !important;
+}
+.van-nav-bar__right {
+  height: 40px;
+  right: 8px !important;
+}
+
+.iconfont {
+  margin-left: 8px;
+}
+.my-swipe .van-swipe-item {
+  color: #fff;
+  font-size: 20px;
+  line-height: 70%;
+  text-align: center;
+  background-color: #39a9ed;
+}
+.tab {
+  margin: 15px 0px !important;
+}
+.bannerimage {
+  width: 100%;
+  height: 100%;
+}
+.center {
+  text-align: center;
+}
+.top {
+  padding: 5px;
+  background: rgba(78, 80, 82, 0.39);
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+}
+.nav {
+  margin: 5px 0px;
+  
+}
+.home {
+  background-color: #f6f7f9;
+}
+.itcon {
+  text-align: center;
+  align-items: center;
+}
+.font {
+  font-size: 12px;
 }
 </style>

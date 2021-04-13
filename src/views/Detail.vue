@@ -106,6 +106,7 @@
                 </Row>
                 <Row>
                   <Col span="24">
+                  综合:
                     <Rate icon="ios-heart" allow-half v-model="valueHalf2" />
                   </Col>
                 </Row>

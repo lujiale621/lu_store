@@ -10,7 +10,8 @@ import vuescroll from 'vuescroll'
 import 'view-design/dist/styles/iview.css';
 import { Lazyload } from 'vant';
 import store from './store'
-
+import './assets/iconfont/iconfont.css'
+import './assets/iconfont2/iconfont.js'
 Vue.prototype.$target = "http://localhost:3000/"; // 本地后端地址
 Vue.use(ElementUI);
 Vue.use(Lazyload);
