@@ -48,7 +48,7 @@
                 lazy-load
                 style="height: 140px"
                 :src="this.$target+this.sortattrs.product_picture"
-                @click="todetail(sortattrs.url)"
+                @click="todetail(sortattrs.product_id)"
               ></van-image>
             </div>
             <p class="ms van-ellipsis">{{ sortattrs.product_price }}元</p>
@@ -73,17 +73,11 @@ export default {
   name: "sortcard",
   props: ["sortattrs"],
   mounted() {
-    console.log("this:", this);
+   // console.log("this:", this);
   },
   methods: {
     todetail: function (value) {
-      this.$router.push({
-        path: "/detail",
-        query: {
-          url: value,
-          textsize: this.sortattrs.textsize,
-        },
-      });
+      this.$router.push({path:'/detail',query:{productID:value}});
     },
   },
 };

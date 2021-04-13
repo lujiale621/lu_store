@@ -13,7 +13,7 @@
       <div class="sad">
         <vue-scroll :ops="ops">
           <div class="card" v-for="item2 in product" :key="item2.product_id">
-            <sortcard :sortattrs="item2"></sortcard>
+            <sortcard :sortattrs="item2" :to="{ path: '/details', query: {productID:item2.product_id}}"></sortcard>
           </div>
         </vue-scroll>
       </div>
@@ -87,9 +87,9 @@ export default {
   watch: {
     // 监听点击了哪个分类标签，通过修改分类id，响应相应的商品
     activeKey: function (val) {
-      console.log("val:", val);
+    //  console.log("val:", val);
       this.activeName = "" + val;
-      console.log(this.activeName);
+      //console.log(this.activeName);
       if (val == 0) {
         this.categoryID = [];
       }
@@ -113,7 +113,7 @@ export default {
     },
     // 监听分类id，响应相应的商品
     categoryID: function () {
-      console.log("catagoryid", this.categoryID);
+     // console.log("catagoryid", this.categoryID);
       this.getData();
       this.search = "";
     },
@@ -169,11 +169,10 @@ export default {
           const cate = res.data.category;
           cate.unshift(val);
           cate.forEach((element) => {
-            console.log(element);
+           
             this.categoryList.push(element);
           });
           //   this.categoryList = cate;
-          console.log("this:", this);
         })
         .catch((err) => {
           return Promise.reject(err);
@@ -182,7 +181,7 @@ export default {
     // 向后端请求全部商品或分类商品数据
     getData() {
       // 如果分类列表为空则请求全部商品数据，否则请求分类商品数据
-      console.log("getdata");
+      //console.log("getdata");
       const api =
         this.categoryID.length == 0
           ? "/api/product/getAllProduct"
@@ -196,7 +195,7 @@ export default {
         .then((res) => {
           this.product = res.data.Product;
           this.total = res.data.total;
-          console.log("this", this);
+        
         })
         .catch((err) => {
           return Promise.reject(err);

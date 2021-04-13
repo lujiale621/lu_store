@@ -37,6 +37,7 @@
           lazy-load
           style="height: 140px"
           :src="this.$target+this.nvattrs.product_picture"
+          @click="todetail(nvattrs.product_id)"
         >
         </van-image>
       </div>
@@ -59,7 +60,9 @@ export default {
    
   },
   methods: {
-
+  todetail: function (value) {
+      this.$router.push({path:'/detail',query:{productID:value}});
+    },
   }
   
 };

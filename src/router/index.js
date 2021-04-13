@@ -3,6 +3,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import home from '../views/Home.vue'
 import sort from '../views/Sort.vue'
+import detail from '../views/Detail.vue'
+
 Vue.use(Router)
 export default new Router({
   routes: [
@@ -17,6 +19,11 @@ export default new Router({
         keepAlive: true // 需要缓存
       }
     },
+       {
+      name: 'Detail', path: '/detail', component: detail, meta: {
+        keepAlive: true // 需要缓存
+      }
+    }
 
   ]
 })
