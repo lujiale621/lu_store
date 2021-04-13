@@ -12,8 +12,48 @@
           <img class="icon-avatar" src="../assets/av.png" alt="Smiley face" width="30" height="30" />
         </template>
         <template #right>
-          <van-icon :size="5" class="iconfont icon-email-fill fontsize" name="sixin">登录|</van-icon>
-          <van-icon :size="5" class="iconfont icon-clock-fill fontsize" name="lishijilu">注册</van-icon>
+     
+   <div class="login">   
+          <!-- 顶部导航栏 -->
+                  <Dropdown>
+        <a href="javascript:void(0)">
+            菜单
+            <Icon type="ios-arrow-down"></Icon>
+        </a>
+        <DropdownMenu slot="list">
+            <DropdownItem>  <li v-if="!$store.getters.getUser">
+              <el-button type="text" @click="login">登录</el-button>
+              <span class="sep">|</span>
+              <el-button type="text" @click="register = true">注册</el-button>
+            </li>
+            <li v-else>
+              欢迎
+              <el-popover placement="top" width="180" v-model="visible">
+                <p>确定退出登录吗？</p>
+                <div style="text-align: right; margin: 10px 0 0">
+                  <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+                  <el-button type="primary" size="mini" @click="logout">确定</el-button>
+                </div>
+                <el-button type="text" slot="reference">{{$store.getters.getUser.userName}}</el-button>
+              </el-popover>
+            </li></DropdownItem>
+            <DropdownItem>  <li>
+              <router-link to="/order">我的订单</router-link>
+            </li></DropdownItem>
+            <DropdownItem>   <li>
+              <router-link to="/collect">我的收藏</router-link>
+            </li></DropdownItem>
+            <DropdownItem divided><li :class="getNum > 0 ? 'shopCart-full' : 'shopCart'">
+              <router-link to="/shoppingCart">
+                <i class="el-icon-shopping-cart-full"></i> 购物车
+                <span class="num">({{getNum}})</span>
+              </router-link>
+            </li></DropdownItem>
+        </DropdownMenu>
+    </Dropdown>
+
+       
+         </div>
         </template>
       </van-nav-bar>
     </div>
@@ -26,6 +66,9 @@
       </van-swipe>
     </div>
     <div class="body">
+         <MyLogin class="mylogin"></MyLogin>
+         <MyRegister class="myregister" :register="register" @fromChild="isRegister"></MyRegister> 
+   
       <!-- 文字较短时，通过设置 scrollable 属性开启滚动播放 -->
       <van-notice-bar scrollable text="技术是开发它的人的共同灵魂。" />
      <van-tabs v-model="active" scrollspy sticky>
@@ -71,7 +114,12 @@
   </div>
 </template>
 <script>
+
 import Mylist from "@/components/Mylist.vue"
+import MyRegister from '@/components/MyRegister';
+import MyLogin from '@/components/MyLogin';
+import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   name: "home",
   data() {
@@ -93,8 +141,13 @@ export default {
       accessoryActive: 1, // 配件当前选中的商品分类
       active_bar:'',
       active:'',
-      searchvalue:''
+      searchvalue:'',
+       register: false, // 是否显示注册组件
+          visible: false // 是否退出登录
     };
+  },
+    computed: {
+    ...mapGetters(["getUser", "getNum"])
   },
   watch: {
     // 家电当前选中的商品分类，响应不同的商品数据
@@ -165,6 +218,24 @@ export default {
     );
   },
   methods: {
+     ...mapActions(["setUser", "setShowLogin", "setShoppingCart"]),
+     // 退出登录
+    logout() {
+      this.visible = false;
+      // 清空本地登录信息
+      localStorage.setItem("user", "");
+      // 清空vuex登录信息
+      this.setUser("");
+      this.notifySucceed("成功退出登录");
+    },
+       // 接收注册子组件传过来的数据
+    isRegister(val) {
+      this.register = val;
+    },
+       login() {
+      // 点击登录按钮, 通过更改vuex的showLogin值显示登录组件
+      this.setShowLogin(true);
+    },
     // 获取家电模块子组件传过来的数据
     getChildMsg(val) {
       this.applianceActive = val;
@@ -189,7 +260,7 @@ export default {
     },
   },
   components:{
-    Mylist
+    Mylist,MyRegister,MyLogin
   }
 };
 </script>
@@ -229,5 +300,22 @@ export default {
   color: #fff;
   text-align: center;
   border-radius: 2px;
+}
+.login{
+  padding: 0px;
+  margin-left: 50px;
+  width: 90px;
+  height: 100%;
+  text-align: center;
+  line-height: 46px;
+}
+.mylogin{
+  background: blue;
+    padding: 0px;
+  margin: 0px;
+  width: 50px;
+  height: 100%;
+  color: black;
+
 }
 </style>
