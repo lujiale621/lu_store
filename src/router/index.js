@@ -11,7 +11,8 @@ export default new Router({
     { path: '/', redirect: '/home' },
     {
       name: 'Home', path: '/home', component: home, meta: {
-        keepAlive: true // 需要缓存
+        keepAlive: true, // 需要缓存
+       
       }
     },
     {
@@ -19,9 +20,38 @@ export default new Router({
         keepAlive: true // 需要缓存
       }
     },
-       {
+    {
       name: 'Detail', path: '/detail', component: detail, meta: {
         keepAlive: true // 需要缓存
+      }
+    },
+    {
+      name: 'Shoporder', path: '/shoppingCart', component: () => import('../views/Shoporder.vue'), meta: {
+       
+      }
+    },
+    {
+      path: '/collect',
+      name: 'Collect',
+      component: () => import('../views/Collect.vue'),
+      meta: {
+       
+      }
+    },
+    {
+      path: '/order',
+      name: 'Order',
+      component: () => import('../views/SumOrder.vue'),
+      meta: {
+      
+      }
+    },
+    {
+      path: '/confirmOrder',
+      name: 'ConfirmOrder',
+      component: () => import('../views/ConfirmOrder.vue'),
+      meta: {
+      
       }
     }
 

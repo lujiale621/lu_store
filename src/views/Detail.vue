@@ -4,7 +4,6 @@
       <van-nav-bar
         :title="this.productDetails.product_name"
         left-text="返回"
-  
         left-arrow
         @click-left="onClickLeft"
       />
@@ -31,6 +30,9 @@
       </van-popup>
     </div>
     <div>
+      <MyLogin class="mylogin"></MyLogin>
+      <MyRegister class="myregister" :register="register" @fromChild="isRegister"></MyRegister>
+
       <vue-scroll :ops="ops">
         <div>
           <Row>
@@ -82,7 +84,7 @@
                       </Row>
                     </Col>
                   </Row>
-                   <Row>
+                  <Row>
                     <Col span="24">店铺预售，付款后120天内发货</Col>
                   </Row>
                 </div>
@@ -106,7 +108,7 @@
                 </Row>
                 <Row>
                   <Col span="24">
-                  综合:
+                    综合:
                     <Rate icon="ios-heart" allow-half v-model="valueHalf2" />
                   </Col>
                 </Row>
@@ -119,9 +121,9 @@
     <div>
       <van-goods-action>
         <van-goods-action-icon icon="chat-o" text="客服" color="#ee0a24" />
-        <van-goods-action-icon icon="cart-o" text="购物车" />
-        <van-goods-action-icon icon="star" text="已收藏" color="#ff5000" />
-        <van-goods-action-button type="warning" text="加入购物车" />
+        <van-goods-action-icon icon="cart-o" text="购物车" :to="{ path: '/shoppingCart' }" />
+        <van-goods-action-icon icon="star" text="收藏" color="#ff5000" @click="addCollect" />
+        <van-goods-action-button type="warning" text="加入购物车" @click="addShoppingCart" />
         <van-goods-action-button type="danger" text="立即购买" />
       </van-goods-action>
     </div>
@@ -129,6 +131,8 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+import MyRegister from '@/components/MyRegister';
+import MyLogin from '@/components/MyLogin';
 const coupon = {
   available: 1,
   condition: "无使用门槛\n最多优惠12元",
@@ -143,6 +147,8 @@ const coupon = {
 export default {
   data() {
     return {
+          register: false, // 是否显示注册组件
+          visible: false,// 是否退出登录
       valueHalf: 4,
       valueHalf2: 5,
       dis: false, // 控制“加入购物车按钮是否可用”
@@ -186,6 +192,10 @@ export default {
     },
   },
   methods: {
+           // 接收注册子组件传过来的数据
+    isRegister(val) {
+      this.register = val;
+    },
     onClickLeft() {
       this.$router.go(-1);
     },
@@ -206,7 +216,7 @@ export default {
         })
         .then((res) => {
           this.productDetails = res.data.Product[0];
-          console.log("this", this);
+        
         })
         .catch((err) => {
           return Promise.reject(err);
@@ -220,7 +230,7 @@ export default {
         })
         .then((res) => {
           this.productPicture = res.data.ProductPicture;
-          console.log("this", this);
+        
         })
         .catch((err) => {
           return Promise.reject(err);
@@ -287,7 +297,9 @@ export default {
           return Promise.reject(err);
         });
     },
-  },
+  },components:{
+    MyRegister,MyLogin
+  }
 };
 </script>
 <style scoped>
@@ -309,8 +321,8 @@ export default {
   text-align: center;
   margin: 0px 100px;
 }
-.first{
-    color: rgb(80, 73, 73);
-    size: 30px;
+.first {
+  color: rgb(80, 73, 73);
+  size: 30px;
 }
 </style>
