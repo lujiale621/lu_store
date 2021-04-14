@@ -129,7 +129,7 @@
       <van-tabbar v-model="active_bar">
         <van-tabbar-item icon="home-o">首页</van-tabbar-item>
         <van-tabbar-item icon="search" :to="{ path: '/sort' }">分类</van-tabbar-item>
-        <van-tabbar-item icon="friends-o">购物车</van-tabbar-item>
+        <van-tabbar-item icon="friends-o" to="/shoppingCart">购物车</van-tabbar-item>
         <van-tabbar-item icon="setting-o">我的</van-tabbar-item>
       </van-tabbar>
     </div>

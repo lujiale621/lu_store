@@ -26,83 +26,114 @@
         @add="onAdd"
         @edit="onEdit"
       />
+      <!-- 头部 -->
+      <div class="confirmOrder-header">
+        <div class="header-content">
+          <p>
+            <i class="el-icon-s-order">商品及优惠券</i>
+          </p>
 
+          <router-link to></router-link>
+        </div>
+      </div>
+      <!-- 头部END -->
       <!-- 商品及优惠券 -->
       <div class="section-goods">
-        <p class="title">商品及优惠券</p>
         <div class="goods-list">
           <ul>
             <li v-for="item in getCheckGoods" :key="item.id">
               <img :src="$target + item.productImg" />
-              <span class="pro-name">{{item.productName}}</span>
-              <span class="pro-price">{{item.price}}元 x {{item.num}}</span>
-              <span class="pro-status"></span>
-              <span class="pro-total">{{item.price * item.num}}元</span>
+              <span class="pro-name sspan">{{item.productName}}</span>
+              <span class="pro-price sspan">{{item.price}}元 x {{item.num}}</span>
+              <span class="pro-status sspan"></span>
+              <span class="pro-total sspan">{{item.price * item.num}}元</span>
             </li>
           </ul>
         </div>
       </div>
       <!-- 商品及优惠券END -->
-
-      <!-- 配送方式 -->
-      <div class="section-shipment">
-        <p class="title">配送方式</p>
-        <p class="shipment">包邮</p>
-      </div>
-      <!-- 配送方式END -->
-
-      <!-- 发票 -->
-      <div class="section-invoice">
-        <p class="title">发票</p>
-        <p class="invoice">电子发票</p>
-        <p class="invoice">个人</p>
-        <p class="invoice">商品明细</p>
-      </div>
-      <!-- 发票END -->
-
-      <!-- 结算列表 -->
-      <div class="section-count">
-        <div class="money-box">
-          <ul>
-            <li>
-              <span class="title">商品件数：</span>
-              <span class="value">{{getCheckNum}}件</span>
-            </li>
-            <li>
-              <span class="title">商品总价：</span>
-              <span class="value">{{getTotalPrice}}元</span>
-            </li>
-            <li>
-              <span class="title">活动优惠：</span>
-              <span class="value">-0元</span>
-            </li>
-            <li>
-              <span class="title">优惠券抵扣：</span>
-              <span class="value">-0元</span>
-            </li>
-            <li>
-              <span class="title">运费：</span>
-              <span class="value">0元</span>
-            </li>
-            <li class="total">
-              <span class="title">应付总额：</span>
-              <span class="value">
-                <span class="total-price">{{getTotalPrice}}</span>元
-              </span>
-            </li>
-          </ul>
+      <Card :bordered="false">
+        <!-- 配送方式 -->
+        <div class="section-shipment">
+          <Row>
+            <Col span="5">
+              <p class="title">配送方式:</p>
+            </Col>
+            <Col span="4">
+              <p class="shipment">包邮</p>
+            </Col>
+          </Row>
         </div>
-      </div>
-      <!-- 结算列表END -->
+        <!-- 配送方式END -->
 
-      <!-- 结算导航 -->
-      <div class="section-bar">
-        <div class="btn">
-          <router-link to="/shoppingCart" class="btn-base btn-return">返回购物车</router-link>
-          <a href="javascript:void(0);" @click="addOrder" class="btn-base btn-primary">结算</a>
+        <!-- 发票 -->
+        <div class="section-invoice">
+          <Row>
+            <Col span="3">
+              <p class="title">发票:</p>
+            </Col>
+            <Col span="4">
+              <p class="shipment">电子发票</p>
+            </Col>
+          </Row>
+          <p class="invoice">商品明细</p>
         </div>
-      </div>
-      <!-- 结算导航END -->
+        <!-- 发票END -->
+
+        <!-- 结算列表 -->
+        <div class="section-count">
+          <div class="money-box">
+            <ul>
+              <li>
+                <span class="title">商品件数：</span>
+                <span class="value">{{getCheckNum}}件</span>
+              </li>
+              <li>
+                <span class="title">商品总价：</span>
+                <span class="value">{{getTotalPrice}}元</span>
+              </li>
+              <li>
+                <span class="title">活动优惠：</span>
+                <span class="value">-0元</span>
+              </li>
+              <li>
+                <span class="title">优惠券抵扣：</span>
+                <span class="value">-0元</span>
+              </li>
+              <li>
+                <span class="title">运费：</span>
+                <span class="value">0元</span>
+              </li>
+              <li class="total">
+                <span class="title">应付总额：</span>
+                <span class="value">
+                  <span class="total-price">{{getTotalPrice}}</span>元
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- 结算列表END -->
+
+        <!-- 结算导航 -->
+        <div class="section-bar">
+          <div class="btn">
+            <Row>
+              <Col span="8">
+                <router-link to="/shoppingCart" class="btn-base btn-return">
+                  <van-button type="primary">返回购物车</van-button>
+                </router-link>
+              </Col>
+              <Col span="8">
+                <div class="btn2">
+                  <van-button type="info" @click="addOrder">结算</van-button>
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </div>
+        <!-- 结算导航END -->
+      </Card>
     </div>
     <!-- 主要内容容器END -->
   </div>
@@ -164,36 +195,37 @@ export default {
     },
     ...mapActions(["deleteShoppingCart"]),
     addOrder() {
-      this.$axios
-        .post("/api/user/order/addOrder", {
-          user_id: this.$store.getters.getUser.user_id,
-          products: this.getCheckGoods,
-        })
-        .then((res) => {
-          let products = this.getCheckGoods;
-          switch (res.data.code) {
-            // “001”代表结算成功
-            case "001":
-              for (let i = 0; i < products.length; i++) {
-                const temp = products[i];
-                // 删除已经结算的购物车商品
-                this.deleteShoppingCart(temp.id);
-              }
-              // 提示结算结果
-              this.notifySucceed(res.data.msg);
-              // 跳转我的订单页面
-              this.$router.push({ path: "/order" });
-              break;
-            default:
-              // 提示失败信息
-              this.notifyError(res.data.msg);
-          }
-        })
-        .catch((err) => {
-          return Promise.reject(err);
-        });
-    },
-  },
+       this.notifySucceed("购买成功");
+    //   this.$axios
+    //     .post("/api/user/order/addOrder", {
+    //       user_id: this.$store.getters.getUser.user_id,
+    //       products: this.getCheckGoods,
+    //     })
+    //     .then((res) => {
+    //       let products = this.getCheckGoods;
+    //       switch (res.data.code) {
+    //         // “001”代表结算成功
+    //         case "001":
+    //           for (let i = 0; i < products.length; i++) {
+    //             const temp = products[i];
+    //             // 删除已经结算的购物车商品
+    //             this.deleteShoppingCart(temp.id);
+    //           }
+    //           // 提示结算结果
+    //           this.notifySucceed(res.data.msg);
+    //           // 跳转我的订单页面
+    //           this.$router.push({ path: "#" });
+    //           break;
+    //         default:
+    //           // 提示失败信息
+    //           this.notifyError(res.data.msg);
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       return Promise.reject(err);
+    //     });
+    // },
+  },}
 };
 </script>
 <style scoped>
@@ -201,12 +233,27 @@ img {
   width: 60px;
   height: 60px;
 }
- .el-icon-s-order{
-   size: 100px;
-   color: cornflowerblue;
-   text-align: center;
- }
- .van-address-list__bottom{
-   display: none;
- }
+.el-icon-s-order {
+  size: 100px;
+  color: cornflowerblue;
+  text-align: center;
+}
+.van-address-list__bottom {
+  display: none;
+}
+.sspan {
+  margin: 10px 10px;
+  padding: auto;
+  padding-bottom: 10px;
+}
+.btn2 {
+  padding-right: 30px;
+}
+.btn {
+  font-size: 30px;
+  padding-right: 30px;
+}
+i{
+  font-size: 20px!important;
+}
 </style>

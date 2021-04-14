@@ -39,14 +39,6 @@ export default new Router({
       }
     },
     {
-      path: '/order',
-      name: 'Order',
-      component: () => import('../views/SumOrder.vue'),
-      meta: {
-      
-      }
-    },
-    {
       path: '/confirmOrder',
       name: 'ConfirmOrder',
       component: () => import('../views/ConfirmOrder.vue'),
