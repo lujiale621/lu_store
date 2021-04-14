@@ -1,30 +1,144 @@
 <template>
-    <div>确认订单页面组件</div>
+  <div class="confirmOrder">
+    <div>
+      <van-nav-bar title="我的订单" left-text="返回" left-arrow @click-left="onClickLeft" />
+    </div>
+    <!-- 头部 -->
+    <div class="confirmOrder-header">
+      <div class="header-content">
+        <p>
+          <i class="el-icon-s-order">收货地址：</i>
+        </p>
+
+        <router-link to></router-link>
+      </div>
+    </div>
+    <!-- 头部END -->
+
+    <!-- 主要内容容器 -->
+    <div class="content">
+      <van-address-list
+        v-model="chosenAddressId"
+        :list="list"
+        :disabled-list="disabledList"
+        disabled-text="以下地址超出配送范围"
+        default-tag-text="默认"
+        @add="onAdd"
+        @edit="onEdit"
+      />
+
+      <!-- 商品及优惠券 -->
+      <div class="section-goods">
+        <p class="title">商品及优惠券</p>
+        <div class="goods-list">
+          <ul>
+            <li v-for="item in getCheckGoods" :key="item.id">
+              <img :src="$target + item.productImg" />
+              <span class="pro-name">{{item.productName}}</span>
+              <span class="pro-price">{{item.price}}元 x {{item.num}}</span>
+              <span class="pro-status"></span>
+              <span class="pro-total">{{item.price * item.num}}元</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- 商品及优惠券END -->
+
+      <!-- 配送方式 -->
+      <div class="section-shipment">
+        <p class="title">配送方式</p>
+        <p class="shipment">包邮</p>
+      </div>
+      <!-- 配送方式END -->
+
+      <!-- 发票 -->
+      <div class="section-invoice">
+        <p class="title">发票</p>
+        <p class="invoice">电子发票</p>
+        <p class="invoice">个人</p>
+        <p class="invoice">商品明细</p>
+      </div>
+      <!-- 发票END -->
+
+      <!-- 结算列表 -->
+      <div class="section-count">
+        <div class="money-box">
+          <ul>
+            <li>
+              <span class="title">商品件数：</span>
+              <span class="value">{{getCheckNum}}件</span>
+            </li>
+            <li>
+              <span class="title">商品总价：</span>
+              <span class="value">{{getTotalPrice}}元</span>
+            </li>
+            <li>
+              <span class="title">活动优惠：</span>
+              <span class="value">-0元</span>
+            </li>
+            <li>
+              <span class="title">优惠券抵扣：</span>
+              <span class="value">-0元</span>
+            </li>
+            <li>
+              <span class="title">运费：</span>
+              <span class="value">0元</span>
+            </li>
+            <li class="total">
+              <span class="title">应付总额：</span>
+              <span class="value">
+                <span class="total-price">{{getTotalPrice}}</span>元
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- 结算列表END -->
+
+      <!-- 结算导航 -->
+      <div class="section-bar">
+        <div class="btn">
+          <router-link to="/shoppingCart" class="btn-base btn-return">返回购物车</router-link>
+          <a href="javascript:void(0);" @click="addOrder" class="btn-base btn-primary">结算</a>
+        </div>
+      </div>
+      <!-- 结算导航END -->
+    </div>
+    <!-- 主要内容容器END -->
+  </div>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
 import { mapActions } from "vuex";
 export default {
-  name: "",
+  name: "ConfirmOrder",
   data() {
     return {
-      // 虚拟数据
-      confirmAddress: 1, // 选择的地址id
-      // 地址列表
-      address: [
+      chosenAddressId: "1",
+      list: [
         {
-          id: 1,
-          name: "陈同学",
-          phone: "13580018623",
-          address: "广东 广州市 白云区 江高镇 广东白云学院"
+          id: "1",
+          name: "张三",
+          tel: "13000000000",
+          address: "浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室",
+          isDefault: true,
         },
         {
-          id: 2,
-          name: "陈同学",
-          phone: "13580018623",
-          address: "广东 茂名市 化州市 杨梅镇 ***"
-        }
-      ]
+          id: "2",
+          name: "李四",
+          tel: "1310000000",
+          address: "浙江省杭州市拱墅区莫干山路 50 号",
+        },
+      ],
+      disabledList: [
+        {
+          id: "3",
+          name: "王五",
+          tel: "1320000000",
+          address: "浙江省杭州市滨江区江南大道 15 号",
+        },
+      ],
     };
   },
   created() {
@@ -36,17 +150,26 @@ export default {
   },
   computed: {
     // 结算的商品数量; 结算商品总计; 结算商品信息
-    ...mapGetters(["getCheckNum", "getTotalPrice", "getCheckGoods"])
+    ...mapGetters(["getCheckNum", "getTotalPrice", "getCheckGoods"]),
   },
   methods: {
+    onAdd() {
+      console.log("新增地址");
+    },
+    onEdit(item, index) {
+      console.log("编辑地址:" + index);
+    },
+    onClickLeft() {
+      this.$router.push("/home");
+    },
     ...mapActions(["deleteShoppingCart"]),
     addOrder() {
       this.$axios
         .post("/api/user/order/addOrder", {
           user_id: this.$store.getters.getUser.user_id,
-          products: this.getCheckGoods
+          products: this.getCheckGoods,
         })
-        .then(res => {
+        .then((res) => {
           let products = this.getCheckGoods;
           switch (res.data.code) {
             // “001”代表结算成功
@@ -66,10 +189,24 @@ export default {
               this.notifyError(res.data.msg);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           return Promise.reject(err);
         });
-    }
-  }
+    },
+  },
 };
 </script>
+<style scoped>
+img {
+  width: 60px;
+  height: 60px;
+}
+ .el-icon-s-order{
+   size: 100px;
+   color: cornflowerblue;
+   text-align: center;
+ }
+ .van-address-list__bottom{
+   display: none;
+ }
+</style>

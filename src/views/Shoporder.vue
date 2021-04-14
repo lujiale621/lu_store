@@ -82,7 +82,7 @@
                 </Col>
                 <Col span="4">
                   <div class="pro-img">
-                    <router-link :to="{ path: '/details', query: {productID:item.productID} }">
+                    <router-link :to="{ path: '#',  }">
                       <img :src="$target + item.productImg" />
                     </router-link>
                   </div>
