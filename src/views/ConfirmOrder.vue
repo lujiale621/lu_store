@@ -1,259 +1,119 @@
 <template>
-  <div class="confirmOrder">
+  <div>
     <div>
-      <van-nav-bar title="我的订单" left-text="返回" left-arrow @click-left="onClickLeft" />
-    </div>
-    <!-- 头部 -->
-    <div class="confirmOrder-header">
-      <div class="header-content">
-        <p>
-          <i class="el-icon-s-order">收货地址：</i>
-        </p>
-
-        <router-link to></router-link>
-      </div>
-    </div>
-    <!-- 头部END -->
-
-    <!-- 主要内容容器 -->
-    <div class="content">
-      <van-address-list
-        v-model="chosenAddressId"
-        :list="list"
-        :disabled-list="disabledList"
-        disabled-text="以下地址超出配送范围"
-        default-tag-text="默认"
-        @add="onAdd"
-        @edit="onEdit"
+      <van-nav-bar
+        title="订单"
+        left-text="返回"
+        left-arrow
+        @click-left="onClickLeft"
       />
-      <!-- 头部 -->
-      <div class="confirmOrder-header">
-        <div class="header-content">
-          <p>
-            <i class="el-icon-s-order">商品及优惠券</i>
-          </p>
-
-          <router-link to></router-link>
-        </div>
-      </div>
-      <!-- 头部END -->
-      <!-- 商品及优惠券 -->
-      <div class="section-goods">
-        <div class="goods-list">
-          <ul>
-            <li v-for="item in getCheckGoods" :key="item.id">
-              <img :src="$target + item.productImg" />
-              <span class="pro-name sspan">{{item.productName}}</span>
-              <span class="pro-price sspan">{{item.price}}元 x {{item.num}}</span>
-              <span class="pro-status sspan"></span>
-              <span class="pro-total sspan">{{item.price * item.num}}元</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <!-- 商品及优惠券END -->
-      <Card :bordered="false">
-        <!-- 配送方式 -->
-        <div class="section-shipment">
-          <Row>
-            <Col span="5">
-              <p class="title">配送方式:</p>
-            </Col>
-            <Col span="4">
-              <p class="shipment">包邮</p>
-            </Col>
-          </Row>
-        </div>
-        <!-- 配送方式END -->
-
-        <!-- 发票 -->
-        <div class="section-invoice">
-          <Row>
-            <Col span="3">
-              <p class="title">发票:</p>
-            </Col>
-            <Col span="4">
-              <p class="shipment">电子发票</p>
-            </Col>
-          </Row>
-          <p class="invoice">商品明细</p>
-        </div>
-        <!-- 发票END -->
-
-        <!-- 结算列表 -->
-        <div class="section-count">
-          <div class="money-box">
-            <ul>
-              <li>
-                <span class="title">商品件数：</span>
-                <span class="value">{{getCheckNum}}件</span>
-              </li>
-              <li>
-                <span class="title">商品总价：</span>
-                <span class="value">{{getTotalPrice}}元</span>
-              </li>
-              <li>
-                <span class="title">活动优惠：</span>
-                <span class="value">-0元</span>
-              </li>
-              <li>
-                <span class="title">优惠券抵扣：</span>
-                <span class="value">-0元</span>
-              </li>
-              <li>
-                <span class="title">运费：</span>
-                <span class="value">0元</span>
-              </li>
-              <li class="total">
-                <span class="title">应付总额：</span>
-                <span class="value">
-                  <span class="total-price">{{getTotalPrice}}</span>元
-                </span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <!-- 结算列表END -->
-
-        <!-- 结算导航 -->
-        <div class="section-bar">
-          <div class="btn">
-            <Row>
-              <Col span="8">
-                <router-link to="/shoppingCart" class="btn-base btn-return">
-                  <van-button type="primary">返回购物车</van-button>
-                </router-link>
-              </Col>
-              <Col span="8">
-                <div class="btn2">
-                  <van-button type="info" @click="addOrder">结算</van-button>
-                </div>
-              </Col>
-            </Row>
-          </div>
-        </div>
-        <!-- 结算导航END -->
-      </Card>
     </div>
-    <!-- 主要内容容器END -->
+    <div>
+      <van-steps :active="active">
+        <van-step>买家下单</van-step>
+        <van-step>商家接单</van-step>
+        <van-step>买家提货</van-step>
+        <van-step>交易完成</van-step>
+      </van-steps>
+    </div>
+    <div>
+      <van-notice-bar color="#1989fa" background="#ecf9ff" left-icon="info-o">
+        配送时间：承诺72小时送达
+      </van-notice-bar>
+    </div>
+    <div><van-cell is-link>Lujiale的专卖店</van-cell></div>
+    <div>
+      <van-contact-card type="add" @click="onAdd" />
+      <van-contact-card
+        type="edit"
+        :name="currentContact.name"
+        :tel="currentContact.tel"
+        @click="onEdit"
+      />
+    </div>
+    <div>
+      <div>
+        <div class="body">
+          <van-list
+            v-model="loading"
+            :finished="finished"
+            finished-text="没有更多了"
+            @load="onLoad"
+          >
+            <van-cell v-for="item in mydata" :key="item.id">
+              <van-card
+                :num="item.product_num"
+                :price="item.product_price"
+                :desc="item.product_intro"
+                :title="item.product_title"
+                :thumb="$target + item.product_picture"
+              >
+                <template #tags>
+                  <van-tag plain type="danger">七天无理由</van-tag>
+                  <van-tag plain type="danger">七天价保</van-tag>
+                </template>
+                <template #footer> </template>
+              </van-card>
+            </van-cell>
+          </van-list>
+        </div>
+        <div class="foot">
+          <van-submit-bar
+            :price="carprice"
+            button-text="购买"
+            @submit="onSubmit"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-
 <script>
-import { mapGetters } from "vuex";
-import { mapActions } from "vuex";
+import qs from "qs";
+
 export default {
-  name: "ConfirmOrder",
   data() {
     return {
-      chosenAddressId: "1",
-      list: [
-        {
-          id: "1",
-          name: "张三",
-          tel: "13000000000",
-          address: "浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室",
-          isDefault: true,
-        },
-        {
-          id: "2",
-          name: "李四",
-          tel: "1310000000",
-          address: "浙江省杭州市拱墅区莫干山路 50 号",
-        },
-      ],
-      disabledList: [
-        {
-          id: "3",
-          name: "王五",
-          tel: "1320000000",
-          address: "浙江省杭州市滨江区江南大道 15 号",
-        },
-      ],
+      mydata: "",
+      active: 0,
+      carprice: 120000,
+      currentContact: {
+        name: "张三",
+        tel: "13000000000",
+      },
     };
   },
-  created() {
-    // 如果没有勾选购物车商品直接进入确认订单页面,提示信息并返回购物车
-    if (this.getCheckNum < 1) {
-      this.notifyError("请勾选商品后再结算");
-      this.$router.push({ path: "/shoppingCart" });
-    }
-  },
-  computed: {
-    // 结算的商品数量; 结算商品总计; 结算商品信息
-    ...mapGetters(["getCheckNum", "getTotalPrice", "getCheckGoods"]),
+  mounted() {
+    // 判断是否登录,没有登录则显示登录组件
+    this.user = this.$store.getters.getUser;
+
+    console.log(this.user);
+    this.mydata = this.user;
+
+    // 向后端发起更新购物车的数据库信息请求
+    this.$axios
+      .post(
+        "/api2/shop/getshop",
+        qs.stringify({
+          user_id: parseInt(this.user.user_id),
+        })
+      )
+      .then((res) => {
+        this.mydata = res.data;
+        console.log(this.mydata);
+      });
   },
   methods: {
-    onAdd() {
-      console.log("新增地址");
-    },
-    onEdit(item, index) {
-      console.log("编辑地址:" + index);
-    },
     onClickLeft() {
-      this.$router.push("/home");
+      this.$router.go(-1);
     },
-    ...mapActions(["deleteShoppingCart"]),
-    addOrder() {
-       this.notifySucceed("购买成功");
-    //   this.$axios
-    //     .post("/api/user/order/addOrder", {
-    //       user_id: this.$store.getters.getUser.user_id,
-    //       products: this.getCheckGoods,
-    //     })
-    //     .then((res) => {
-    //       let products = this.getCheckGoods;
-    //       switch (res.data.code) {
-    //         // “001”代表结算成功
-    //         case "001":
-    //           for (let i = 0; i < products.length; i++) {
-    //             const temp = products[i];
-    //             // 删除已经结算的购物车商品
-    //             this.deleteShoppingCart(temp.id);
-    //           }
-    //           // 提示结算结果
-    //           this.notifySucceed(res.data.msg);
-    //           // 跳转我的订单页面
-    //           this.$router.push({ path: "#" });
-    //           break;
-    //         default:
-    //           // 提示失败信息
-    //           this.notifyError(res.data.msg);
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       return Promise.reject(err);
-    //     });
-    // },
-  },}
+    onSubmit() {
+      // 主要通知
+      this.$toast.success("购买成功");
+    },
+    onAdd() {
+      this.$toast("新增");
+    },
+  },
 };
 </script>
-<style scoped>
-img {
-  width: 60px;
-  height: 60px;
-}
-.el-icon-s-order {
-  size: 100px;
-  color: cornflowerblue;
-  text-align: center;
-}
-.van-address-list__bottom {
-  display: none;
-}
-.sspan {
-  margin: 10px 10px;
-  padding: auto;
-  padding-bottom: 10px;
-}
-.btn2 {
-  padding-right: 30px;
-}
-.btn {
-  font-size: 30px;
-  padding-right: 30px;
-}
-i{
-  font-size: 20px!important;
-}
-</style>

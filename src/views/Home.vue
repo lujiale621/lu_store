@@ -38,7 +38,7 @@
               </el-popover>
             </li></DropdownItem>
             <DropdownItem>  <li>
-              <router-link to="/order">我的订单</router-link>
+              <router-link to="/mine">我的订单</router-link>
             </li></DropdownItem>
             <DropdownItem>   <li>
               <router-link to="/collect">我的收藏</router-link>
@@ -73,7 +73,7 @@
       <van-notice-bar scrollable text="技术是开发它的人的共同灵魂。" />
         <div class="nav">
           <van-grid>
-            <van-grid-item :to="{ path: '/showrank2' }">
+            <van-grid-item >
               <div class="itcon">
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#icon-jinrongketang" />
@@ -81,7 +81,7 @@
                 <h4 class="font">推荐</h4>
               </div>
             </van-grid-item>
-            <van-grid-item :to="{ path: '/showrank' }">
+            <van-grid-item >
               <div class="itcon">
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#icon-bangdan" />
@@ -130,7 +130,7 @@
         <van-tabbar-item icon="home-o">首页</van-tabbar-item>
         <van-tabbar-item icon="search" :to="{ path: '/sort' }">分类</van-tabbar-item>
         <van-tabbar-item icon="friends-o" to="/shoppingCart">购物车</van-tabbar-item>
-        <van-tabbar-item icon="setting-o">我的</van-tabbar-item>
+        <van-tabbar-item icon="setting-o" to="/mine">我的</van-tabbar-item>
       </van-tabbar>
     </div>
   </div>

@@ -279,8 +279,8 @@ export default {
         this.$store.dispatch("setShowLogin", true);
         return;
       }
-      this.$axios
-        .post("/api/user/collect/addCollect", {
+      console.log(this.$store.getters.getUser)
+      this.$axios.post("/api/user/collect/addCollect", {
           user_id: this.$store.getters.getUser.user_id,
           product_id: this.productID,
         })
